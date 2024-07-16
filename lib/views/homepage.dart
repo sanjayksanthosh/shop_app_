@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoop_app/providers/itemProvide.dart';
 import 'package:shoop_app/views/cartPage.dart';
 import 'package:shoop_app/views/categoryPage.dart';
 import 'package:shoop_app/views/orderPage.dart';
 import 'package:shoop_app/views/profilePage.dart';
 import 'package:shoop_app/widgets/product_card.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -16,6 +21,36 @@ class _HomepageState extends State<Homepage> {
   int _currentIndex = 0;
 
   List pages = [Home(), Categorypage(), Cartpage(), OrderPage()];
+
+  List Products = [];
+
+  void getProducts() async {
+    String url = "https://node-server-ymb5.onrender.com/items";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      print('sucess: $jsonResponse');
+      setState(() {
+        Products = jsonResponse;
+      });
+
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        final providerItems = Provider.of<Itemprovide>(context, listen: false);
+        providerItems.getitems(Products);
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+  @override
+  void initState() {
+    getProducts();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,20 +141,22 @@ class Home extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 4 / 5,
-              crossAxisCount: 2, // number of items in each row
-              mainAxisSpacing: 8.0, // spacing between rows
-              crossAxisSpacing: 8.0, // spacing between columns
-            ),
-            padding: EdgeInsets.all(8.0),
-            itemCount: 4, // total number of items,
+          child: Consumer<Itemprovide>(builder: (context, item, _) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 4 / 5,
+                crossAxisCount: 2, // number of items in each row
+                mainAxisSpacing: 8.0, // spacing between rows
+                crossAxisSpacing: 8.0, // spacing between columns
+              ),
+              padding: EdgeInsets.all(8.0),
+              itemCount: 3, // total number of items,
 
-            itemBuilder: (context, index) {
-              return Productcard();
-            },
-          ),
+              itemBuilder: (context, index) {
+                return Productcard(product: item.products[index]);
+              },
+            );
+          }),
         )
       ],
     );

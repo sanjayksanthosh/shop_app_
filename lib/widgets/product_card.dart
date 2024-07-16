@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shoop_app/views/product_details_page.dart';
 
 class Productcard extends StatelessWidget {
-  const Productcard({super.key});
+  var product;
+  Productcard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +12,8 @@ class Productcard extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
             return ProductDetailsPage(
-              name: "Tomato",
-              price: "Rs. 50",
+              name: product['name'],
+              price: product['price'],
               image:
                   "https://images.unsplash.com/photo-1610099167931-33655a52194b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             );
