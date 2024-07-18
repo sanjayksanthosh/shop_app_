@@ -12,11 +12,9 @@ class Productcard extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
             return ProductDetailsPage(
-              name: product['name'],
-              price: product['price'],
-              image:
-                  "https://images.unsplash.com/photo-1610099167931-33655a52194b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            );
+                name: product['name'],
+                price: product['price'].toString(),
+                image: product['image']);
           },
         ));
       },
@@ -36,9 +34,7 @@ class Productcard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(
-                        "https://images.unsplash.com/photo-1610099167931-33655a52194b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      ))),
+                      image: NetworkImage(product["image"]))),
             ),
             SizedBox(
               height: 10,
@@ -47,11 +43,11 @@ class Productcard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Tomato",
+                  product['name'],
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Rs. 50",
+                  "Rs.${product['price'].toString()}",
                   style: TextStyle(fontSize: 20, color: Colors.green),
                 )
               ],
@@ -59,7 +55,11 @@ class Productcard extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text("fresh from the garder aslkdjasldjlaskjdlaskjdlaksjdlka.")
+            Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              product['description'],
+            )
           ],
         ),
       ),

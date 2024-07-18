@@ -142,20 +142,26 @@ class Home extends StatelessWidget {
       children: [
         Expanded(
           child: Consumer<Itemprovide>(builder: (context, item, _) {
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 4 / 5,
-                crossAxisCount: 2, // number of items in each row
-                mainAxisSpacing: 8.0, // spacing between rows
-                crossAxisSpacing: 8.0, // spacing between columns
-              ),
-              padding: EdgeInsets.all(8.0),
-              itemCount: 3, // total number of items,
+            return item.products == null
+                ? Center(
+                    child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator()))
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 4 / 5,
+                      crossAxisCount: 2, // number of items in each row
+                      mainAxisSpacing: 8.0, // spacing between rows
+                      crossAxisSpacing: 8.0, // spacing between columns
+                    ),
+                    padding: EdgeInsets.all(8.0),
+                    itemCount: item.products.length, // total number of items,
 
-              itemBuilder: (context, index) {
-                return Productcard(product: item.products[index]);
-              },
-            );
+                    itemBuilder: (context, index) {
+                      return Productcard(product: item.products[index]);
+                    },
+                  );
           }),
         )
       ],
