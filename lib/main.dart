@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shoop_app/providers/cartProvider.dart';
 import 'package:shoop_app/providers/itemProvide.dart';
 import 'package:shoop_app/views/homepage.dart';
 
@@ -10,6 +11,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Itemprovide()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: const MyApp(),
     ),

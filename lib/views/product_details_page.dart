@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoop_app/model/productmodel.dart';
+import 'package:shoop_app/providers/cartProvider.dart';
+import 'package:shoop_app/providers/itemProvide.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  String? name;
-  String? price;
-  String? image;
+  Product product;
 
-  ProductDetailsPage({super.key, this.name, this.price, this.image});
+  ProductDetailsPage({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name!),
+        title: Text(product!.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -28,16 +30,17 @@ class ProductDetailsPage extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
                         image: DecorationImage(
-                            fit: BoxFit.cover, image: NetworkImage(image!)))),
+                            fit: BoxFit.cover,
+                            image: NetworkImage(product!.image)))),
                 SizedBox(
                   height: 30,
                 ),
                 Text(
-                  name!,
+                  product!.name,
                   style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  price!,
+                  product!.price.toString(),
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -45,7 +48,10 @@ class ProductDetailsPage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<CartProvider>(context, listen: false)
+                      .addToCart(product);
+                },
                 child: Text(
                   "Add to Cart",
                   style: TextStyle(color: Colors.white),

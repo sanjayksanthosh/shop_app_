@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoop_app/model/productmodel.dart';
+import 'package:shoop_app/providers/cartProvider.dart';
 
-class Cartpage extends StatefulWidget {
+class Cartpage extends StatelessWidget {
   Cartpage({super.key});
 
-  @override
-  State<Cartpage> createState() => _CartpageState();
-}
-
-class _CartpageState extends State<Cartpage> {
-  List items = [
-    {"name": "Toothpaste", "price": 100}
-  ];
-
   int totalAmount = 0;
-
-  @override
-  void initState() {
-    totalAmount = items[0]["price"];
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +18,9 @@ class _CartpageState extends State<Cartpage> {
             height: 50,
             width: 400,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Provider.of<CartProvider>(context, listen: false).clearCart();
+              },
               child: Text("clear all"),
               style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.green),
@@ -39,15 +28,21 @@ class _CartpageState extends State<Cartpage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(items[index]["name"]),
-                  trailing: Text(items[index]["price"].toString()),
-                );
-              },
-              itemCount: items.length,
-            ),
+            child: Consumer<CartProvider>(builder: (context, item, _) {
+              item.totalsum();
+              return item.cartItems.isEmpty
+                  ? Center(child: Text("Cart is empty"))
+                  : ListView.builder(
+                      itemBuilder: (context, index) {
+                        Product cartItems = item.cartItems[index];
+                        return ListTile(
+                          title: Text(cartItems.name),
+                          trailing: Text(cartItems.price.toString()),
+                        );
+                      },
+                      itemCount: item.cartItems.length,
+                    );
+            }),
           ),
           Container(
             height: 50,
@@ -61,7 +56,9 @@ class _CartpageState extends State<Cartpage> {
                   SizedBox(
                     width: 30,
                   ),
-                  Text(totalAmount.toString())
+                  Consumer<CartProvider>(builder: (context, item, _) {
+                    return Text(item.totalAmount.toString());
+                  })
                 ],
               ),
               style: ButtonStyle(

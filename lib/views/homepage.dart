@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shoop_app/model/productmodel.dart';
 import 'package:shoop_app/providers/itemProvide.dart';
 import 'package:shoop_app/views/cartPage.dart';
 import 'package:shoop_app/views/categoryPage.dart';
@@ -28,11 +29,11 @@ class _HomepageState extends State<Homepage> {
     String url = "https://node-server-ymb5.onrender.com/items";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      print('sucess: $jsonResponse');
+      // var jsonResponse = jsonDecode(response.body);
       setState(() {
-        Products = jsonResponse;
+        Products = itemsFromJson(response.body);
       });
+      print('sucess: $Products');
 
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         final providerItems = Provider.of<Itemprovide>(context, listen: false);

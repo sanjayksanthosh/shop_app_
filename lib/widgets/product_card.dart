@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shoop_app/model/productmodel.dart';
 import 'package:shoop_app/views/product_details_page.dart';
 
 class Productcard extends StatelessWidget {
-  var product;
+  Product product;
   Productcard({super.key, required this.product});
 
   @override
@@ -12,9 +13,8 @@ class Productcard extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
             return ProductDetailsPage(
-                name: product['name'],
-                price: product['price'].toString(),
-                image: product['image']);
+              product: product,
+            );
           },
         ));
       },
@@ -33,8 +33,7 @@ class Productcard extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(product["image"]))),
+                      fit: BoxFit.cover, image: NetworkImage(product.image))),
             ),
             SizedBox(
               height: 10,
@@ -43,11 +42,11 @@ class Productcard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  product['name'],
+                  product.name,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Rs.${product['price'].toString()}",
+                  "Rs.${product.price.toString()}",
                   style: TextStyle(fontSize: 20, color: Colors.green),
                 )
               ],
@@ -58,7 +57,7 @@ class Productcard extends StatelessWidget {
             Text(
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
-              product['description'],
+              product.description,
             )
           ],
         ),
